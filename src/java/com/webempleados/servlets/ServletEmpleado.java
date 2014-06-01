@@ -39,9 +39,12 @@ public class ServletEmpleado extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         String accion = request.getParameter("accion");
+        accion = accion == null ? "Inicio" : accion;
+        boolean load = false;
 
+        loadCargos(request, response);
         if (("Guardar").equals(accion)) {
             EmpleadoDAO empleadoDAO = new EmpleadoDAO(new Conexion("dba_empleados", "polijic", "jdbc:oracle:thin:@localhost:1521:XE"));
             String nro_identificacion = request.getParameter("nro_identificacion");
@@ -124,12 +127,12 @@ public class ServletEmpleado extends HttpServlet {
                             request.setAttribute("mensaje", "Error al eliminar empleado");
                         }
                         request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
-                    }else{
-                        if ( ("Inicio").equals(accion) ){
+                    } else {
+                        if ("Inicio".equals(accion)) {
                             request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                         }
                     }
-                    
+
                 }
             }
         }
@@ -149,12 +152,8 @@ public class ServletEmpleado extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        
-        
-        
-        
+
     }
-    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -180,7 +179,7 @@ public class ServletEmpleado extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public void loadCargos(HttpServletRequest request, HttpServletResponse response){
+    public void loadCargos(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("Cargos");
         CargoDAO cargoDAO = new CargoDAO(new Conexion("dba_empleados", "polijic", "jdbc:oracle:thin:@localhost:1521:XE"));
         List<Cargo> listCargos;
@@ -192,8 +191,7 @@ public class ServletEmpleado extends HttpServlet {
         } catch (Exception e) {
             Logger.getLogger(ServletEmpleado.class.getName()).log(Level.SEVERE, null, e);
         }
-        
+
     }
-    
-    
+
 }
