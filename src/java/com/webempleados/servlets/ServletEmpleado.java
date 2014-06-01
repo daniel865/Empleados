@@ -8,13 +8,11 @@ package com.webempleados.servlets;
 import com.webempleados.daos.CargoDAO;
 import com.webempleados.daos.Conexion;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.webempleados.daos.EmpleadoDAO;
 import com.webempleados.entidades.Cargo;
 import com.webempleados.entidades.Empleado;
@@ -127,8 +125,8 @@ public class ServletEmpleado extends HttpServlet {
                         }
                         request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                     }else{
-                        if (   ){
-                            
+                        if ( ("Inicio").equals(accion) ){
+                            request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                         }
                     }
                     
@@ -182,4 +180,20 @@ public class ServletEmpleado extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public void loadCargos(HttpServletRequest request, HttpServletResponse response){
+        System.out.println("Cargos");
+        CargoDAO cargoDAO = new CargoDAO(new Conexion("dba_empleados", "polijic", "jdbc:oracle:thin:@localhost:1521:XE"));
+        List<Cargo> listCargos;
+        try {
+            listCargos = cargoDAO.listarCargos();
+            System.out.println(listCargos.toString());
+            request.setAttribute("listCargos", listCargos);
+            request.setAttribute("load", true);
+        } catch (Exception e) {
+            Logger.getLogger(ServletEmpleado.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+    }
+    
+    
 }

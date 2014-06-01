@@ -4,6 +4,8 @@
     Author     : Daniel
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.webempleados.entidades.Cargo"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -16,6 +18,8 @@
     String direccion = request.getAttribute("direccion") != null ? (String) request.getAttribute("direccion") : "";
     String telefono = request.getAttribute("telefono") != null ? (String) request.getAttribute("telefono") : "";
     String cargo = request.getAttribute("cargo") != null ? (String) request.getAttribute("cargo") : "";
+    List<Cargo> listCargos = request.getAttribute("listCargos") != null ? (List<Cargo>) request.getAttribute("listCargos") : null;
+    boolean load = (Boolean) request.getAttribute("load") != null ? (Boolean) request.getAttribute("load") : false;
 %>
 
 
@@ -130,7 +134,11 @@
                         <label class="col-md-4 control-label" for="cargo">Cargo</label>
                         <div class="col-md-5">
                             <select id="cargo" name="cargo" class="form-control input-sm">
-
+                                <option value="">Seleccione un Cargo</option>
+                                <%for ( int idx=0; listCargos!=null && listCargos.size()>0; idx++ ){
+                                    out.println("<option value= " + listCargos.get(idx).getCargo() + ">" + listCargos.get(idx).getDescripcion() + "</option>");
+                                }       
+                                %>
                             </select>
                         </div>
                     </div>
