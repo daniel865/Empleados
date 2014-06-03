@@ -131,7 +131,7 @@ public class ServletEmpleado extends HttpServlet {
                         request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                     } else {
                         if ("Inicio".equals(accion)) {
-                            cargarCargos(request);
+                            //cargarCargos(request);
                             request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                         }
                     }

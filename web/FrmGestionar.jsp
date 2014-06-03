@@ -28,16 +28,16 @@
 
 <%if (mensaje != null) {%>
 <script>
-
+   
     alert('<%=mensaje%>');
 
 </script>
 <%}%>
 
 <script>
-    function recargarListas() {
+    function recargarListas() {  
         var cargarCargos = document.formEmpleado.cargoCargos.value;
-        if ( cargarCargos == "" ){
+        if ( cargarCargos == "no" ){
             document.formEmpleado.cargoCargos.value = "cargado";
             document.formEmpleado.submit();
         }
