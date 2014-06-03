@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 /**
  *
  * @author Daniel
@@ -41,10 +42,13 @@ public class ServletEmpleado extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         String accion = request.getParameter("accion");
-        accion = accion == null ? "Inicio" : accion;
+        accion = accion == null ? "Inicio": accion;
+        
         boolean load = false;
-
-        loadCargos(request, response);
+        
+        System.out.println("Antes cargar");
+        cargarCargos(request);
+        System.out.println("Despues cargar");
         if (("Guardar").equals(accion)) {
             EmpleadoDAO empleadoDAO = new EmpleadoDAO(new Conexion("dba_empleados", "polijic", "jdbc:oracle:thin:@localhost:1521:XE"));
             String nro_identificacion = request.getParameter("nro_identificacion");
@@ -84,10 +88,8 @@ public class ServletEmpleado extends HttpServlet {
                     request.setAttribute("telefono", Long.toString(empleado.getTelefono()));
                     request.setAttribute("cargo", Integer.toString(empleado.getCargo()));
                     request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
-
                 } catch (Exception e) {
                     Logger.getLogger(ServletEmpleado.class.getName()).log(Level.SEVERE, null, e);
-                    request.setAttribute("mensaje", "Empleado no existe");
                     request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                 }
             } else {
@@ -129,6 +131,7 @@ public class ServletEmpleado extends HttpServlet {
                         request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                     } else {
                         if ("Inicio".equals(accion)) {
+                            cargarCargos(request);
                             request.getRequestDispatcher("FrmGestionar.jsp").forward(request, response);
                         }
                     }
@@ -179,16 +182,21 @@ public class ServletEmpleado extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public void loadCargos(HttpServletRequest request, HttpServletResponse response) {
+    private void cargarCargos(HttpServletRequest request) {
         System.out.println("Cargos");
         CargoDAO cargoDAO = new CargoDAO(new Conexion("dba_empleados", "polijic", "jdbc:oracle:thin:@localhost:1521:XE"));
-        List<Cargo> listCargos;
+        List<Cargo> listCargos = null;
         try {
             listCargos = cargoDAO.listarCargos();
             System.out.println(listCargos.toString());
+            for (int i = 0; i < listCargos.size(); i++) {
+                Cargo cargo = listCargos.get(i);
+                System.out.println("cargo:"+cargo.getCargo()+" descripcion: "+cargo.getDescripcion());
+            }
             request.setAttribute("listCargos", listCargos);
             request.setAttribute("load", true);
         } catch (Exception e) {
+            
             Logger.getLogger(ServletEmpleado.class.getName()).log(Level.SEVERE, null, e);
         }
 

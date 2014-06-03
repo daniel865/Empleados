@@ -11,6 +11,7 @@
 
 <%
     String mensaje = request.getAttribute("mensaje") != null ? (String) request.getAttribute("mensaje") : null;
+    List<Cargo> listCargos = request.getAttribute("listCargos") != null ? (List<Cargo>) request.getAttribute("listCargos") : null;
     String nro_identificacion = request.getAttribute("nro_identificacion") != null ? (String) request.getAttribute("nro_identificacion") : "";
     String nombres = request.getAttribute("nombres") != null ? (String) request.getAttribute("nombres") : "";
     String apellido1 = request.getAttribute("apellido1") != null ? (String) request.getAttribute("apellido1") : "";
@@ -18,20 +19,30 @@
     String direccion = request.getAttribute("direccion") != null ? (String) request.getAttribute("direccion") : "";
     String telefono = request.getAttribute("telefono") != null ? (String) request.getAttribute("telefono") : "";
     String cargo = request.getAttribute("cargo") != null ? (String) request.getAttribute("cargo") : "";
-    List<Cargo> listCargos = request.getAttribute("listCargos") != null ? (List<Cargo>) request.getAttribute("listCargos") : null;
     boolean load = (Boolean) request.getAttribute("load") != null ? (Boolean) request.getAttribute("load") : false;
+    String cargoCargos = request.getParameter("cargoCargos");
+    cargoCargos = cargoCargos == null ? "" : cargoCargos;
+
 %>
 
 
 <%if (mensaje != null) {%>
 <script>
+
     alert('<%=mensaje%>');
+
 </script>
 <%}%>
 
 <script>
-    function recargarLista(){
-        var cargarListas 
+    function recargarListas() {
+        var cargarCargos = document.cargoCargos.value;
+        if ( cargarCargos=="" ){
+            alert("cargos: "+cargarCargos);
+            document.cargoCargos.value = "cargado";
+            document.submit();
+        }
+        
     }
 </script>
 
@@ -45,12 +56,8 @@
         <script src="js/jquery-1.10.2.js"></script>
         <script src="js/bootstrap.js"></script>
     </head>
-    <body>
-        <script type="text/javascript">
-   
-        </script>
 
-
+    <body onload="JavaScript: recargarListas();">
 
         <div id="wrapper">
 
@@ -142,10 +149,9 @@
                         <div class="col-md-5">
                             <select id="cargo" name="cargo" class="form-control input-sm">
                                 <option value="">Seleccione un Cargo</option>
-                                <%for ( int idx=0; listCargos!=null && listCargos.size()>0; idx++ ){
-                                    out.println("<option value= " + listCargos.get(idx).getCargo() + ">" + listCargos.get(idx).getDescripcion() + "</option>");
-                                }       
-                                %>
+                                <%for (int idx = 0; listCargos != null && idx < listCargos.size(); idx++) {
+                                        out.print("<option value= " + listCargos.get(idx).getCargo() + ">" + listCargos.get(idx).getDescripcion() + "</option>");
+                                    }%>
                             </select>
                         </div>
                     </div>
@@ -160,7 +166,9 @@
                     </div>
 
                 </fieldset>
+                                    <input id="cargoCargos" type="hidden" name="cargoCargos" value="<%=cargoCargos%>">
             </form>
+
 
             <!-- Modal Buscar-->
             <form class="form-horizontal" action="ServletEmpleado" method="POST" >
@@ -186,6 +194,7 @@
                         </div>
                     </div>
                 </div>
+                
             </form>
 
 
@@ -214,8 +223,8 @@
                     </div>
                 </div>
             </form>
-            
-            
+
+
         </div>
     </body>
 </html>
