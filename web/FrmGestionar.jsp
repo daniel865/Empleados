@@ -36,13 +36,16 @@
 
 <script>
     function recargarListas() {
-        var cargarCargos = document.cargoCargos.value;
-        if ( cargarCargos=="" ){
-            alert("cargos: "+cargarCargos);
-            document.cargoCargos.value = "cargado";
-            document.submit();
+        var cargarCargos = document.formEmpleado.cargoCargos.value;
+        if ( cargarCargos == "" ){
+            document.formEmpleado.cargoCargos.value = "cargado";
+            document.formEmpleado.submit();
         }
         
+        $(function() {
+            var val = <%=cargo%>
+            $("#cargo").val(val);
+        });
     }
 </script>
 
@@ -83,7 +86,7 @@
                 </div> <!-- Fin Barra Colapsada -->
             </nav>
 
-            <form class="form-horizontal" action="ServletEmpleado" method="POST" >
+            <form id="formEmpleado" name="formEmpleado" class="form-horizontal" action="ServletEmpleado" method="POST" >
                 <fieldset>
 
                     <!-- Form Name -->
@@ -150,8 +153,11 @@
                             <select id="cargo" name="cargo" class="form-control input-sm">
                                 <option value="">Seleccione un Cargo</option>
                                 <%for (int idx = 0; listCargos != null && idx < listCargos.size(); idx++) {
-                                        out.print("<option value= " + listCargos.get(idx).getCargo() + ">" + listCargos.get(idx).getDescripcion() + "</option>");
-                                    }%>
+                                        Cargo slect = listCargos.get(idx);
+
+                                %>
+                                <option value= "<%=slect.getCargo()%>"><%=slect.getDescripcion()%></option>
+                                <%}%>
                             </select>
                         </div>
                     </div>
@@ -166,7 +172,7 @@
                     </div>
 
                 </fieldset>
-                                    <input id="cargoCargos" type="hidden" name="cargoCargos" value="<%=cargoCargos%>">
+                <input id="cargoCargos" type="hidden" name="cargoCargos" value="<%=cargoCargos%>">
             </form>
 
 
@@ -194,7 +200,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </form>
 
 
